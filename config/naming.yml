@@ -1,0 +1,46 @@
+# Approved non-secret naming configuration.
+# Do not store credentials, tokens, or R2 secrets here.
+
+catalog: "ftw-week-08"
+
+source:
+  schema: "00-source"
+  volume: "group_a_source"
+  volume_path: "/Volumes/ftw-week-08/00-source/group_a_source"
+
+# Schema names are "<stage-number>-<layer>" and always require backticks in SQL.
+# Stage 04 (integration) has no schema; its outputs land in Gold.
+schemas:
+  control: "01-control"
+  bronze: "02-bronze"
+  silver: "03-silver"
+  gold: "05-gold"
+  analytics: "06-analytics"
+
+tables:
+  control:
+    pipeline_runs: "pipeline_runs"
+    ingestion_batches: "ingestion_batches"
+    data_quality_results: "data_quality_results"
+
+  bronze:
+    green_taxi: "green_taxi_raw"
+    weather: "open_meteo_weather_raw"
+    taxi_zones: "taxi_zones_raw"
+    dot_advisories: "dot_advisories_raw"
+
+  silver:
+    green_taxi: "green_taxi_trips"
+    weather_hourly: "weather_hourly"
+    taxi_zones: "taxi_zones"
+
+  gold:
+    dim_date: "dim_date"
+    dim_hour: "dim_hour"
+    dim_taxi_zone: "dim_taxi_zone"
+    dim_weather_classification: "dim_weather_classification"
+    fact_weather_hourly: "fact_weather_hourly"
+    fact_taxi_trip: "fact_taxi_trip"
+
+  # Populate after the Analytics datasets are approved.
+  analytics: {}

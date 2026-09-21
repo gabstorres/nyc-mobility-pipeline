@@ -1,0 +1,795 @@
+{
+  "datasets": [
+    {
+      "name": "a3a96883",
+      "displayName": "data_quality_results",
+      "config": {
+        "version": "1.1",
+        "source": "`ftw-week-08`.`01-control`.data_quality_results",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          },
+          {
+            "name": "pass_rate",
+            "expr": "100.0 * (SUM(`total_count`) - SUM(`fail_count`)) / NULLIF(SUM(`total_count`), 0)",
+            "displayName": "Pass Rate",
+            "comment": "Percentage of checks that passed — (total_count minus fail_count) divided by total_count times 100. Required because pass rate is a compound ratio that cannot be expressed directly in a widget expression."
+          }
+        ]
+      }
+    },
+    {
+      "name": "d1525da3",
+      "displayName": "gate_status",
+      "config": {
+        "version": "1.1",
+        "source": "`ftw-week-08`.`01-control`.gate_status",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "5dc992e6",
+      "displayName": "Untitled page",
+      "layout": [
+        {
+          "widget": {
+            "name": "844fe817",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 24px;\">**NYC MOBILITY DATA QUALITY DASHBOARD**</span></span>"
+              ],
+              "verticalAlign": "VERTICAL_ALIGN_CENTER"
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "datasets-validated",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d1525da3",
+                  "fields": [
+                    {
+                      "name": "measure(count)",
+                      "expression": "MEASURE(`count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Datasets Validated",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(count)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total-checks",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d1525da3",
+                  "fields": [
+                    {
+                      "name": "executed_at",
+                      "expression": "`executed_at`"
+                    },
+                    {
+                      "name": "sum(pass_count)",
+                      "expression": "SUM(`pass_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "PASS Checks Trend Over Time",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "lineShape": "linear"
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "executed_at",
+                  "axis": {
+                    "title": "Executed At"
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(pass_count)",
+                  "axis": {
+                    "title": "Pass Count"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 21,
+            "width": 8,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "data-quality-checks-per-layer",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d1525da3",
+                  "fields": [
+                    {
+                      "name": "layer",
+                      "expression": "`layer`"
+                    },
+                    {
+                      "name": "sum(checks_run)",
+                      "expression": "SUM(`checks_run`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Data Quality Checks Per Layer",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "layer",
+                  "axis": {
+                    "title": "Layer"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "custom-order",
+                      "orderedValues": [
+                        "control",
+                        "bronze",
+                        "silver",
+                        "integration",
+                        "gold",
+                        "analytics"
+                      ]
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(checks_run)",
+                  "displayName": "Checks Run",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "data-quality-checks-by-dataset-1",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d1525da3",
+                  "fields": [
+                    {
+                      "name": "sum(checks_run)",
+                      "expression": "SUM(`checks_run`)"
+                    },
+                    {
+                      "name": "dataset",
+                      "expression": "`dataset`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Data Quality Checks By Dataset",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(checks_run)",
+                  "axis": {
+                    "title": "Checks Run"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "dataset",
+                  "axis": {
+                    "title": "Dataset"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "custom-order",
+                      "orderedValues": [
+                        "business_questions",
+                        "dim_date",
+                        "dim_hour",
+                        "dim_taxi_zone",
+                        "dim_weather_classification",
+                        "fact_taxi_trip",
+                        "fact_weather_hourly",
+                        "green_taxi",
+                        "ingestion_batches",
+                        "open_meteo",
+                        "taxi_zones",
+                        "trip_maps",
+                        "weather_hourly"
+                      ]
+                    }
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "failure-checks-by-dataset-1",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a3a96883",
+                  "fields": [
+                    {
+                      "name": "count(fail_count)",
+                      "expression": "COUNT(`fail_count`)"
+                    },
+                    {
+                      "name": "dataset",
+                      "expression": "`dataset`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Failure Checks By Dataset",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "count(fail_count)",
+                  "axis": {
+                    "title": "Fail Count"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "dataset",
+                  "axis": {
+                    "title": "Dataset"
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 5,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "359d40f2",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d1525da3",
+                  "fields": [
+                    {
+                      "name": "sum(fail_count)",
+                      "expression": "SUM(`fail_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "FAIL Checks",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(fail_count)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "8797d611",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d1525da3",
+                  "fields": [
+                    {
+                      "name": "sum(warn_count)",
+                      "expression": "SUM(`warn_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "WARN Checks",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(warn_count)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "failures-by-check-type",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a3a96883",
+                  "fields": [
+                    {
+                      "name": "count(fail_count)",
+                      "expression": "COUNT(`fail_count`)"
+                    },
+                    {
+                      "name": "check_type",
+                      "expression": "`check_type`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Failures By Check Type",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "count(fail_count)",
+                  "axis": {
+                    "title": "Fail Count"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "check_type",
+                  "axis": {
+                    "title": "Check Type"
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 5,
+            "y": 9,
+            "width": 7,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "open-issues-failures-warnings",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a3a96883",
+                  "fields": [
+                    {
+                      "name": "status",
+                      "expression": "`status`"
+                    },
+                    {
+                      "name": "layer",
+                      "expression": "`layer`"
+                    },
+                    {
+                      "name": "check_name",
+                      "expression": "`check_name`"
+                    },
+                    {
+                      "name": "check_type",
+                      "expression": "`check_type`"
+                    },
+                    {
+                      "name": "fail_count",
+                      "expression": "`fail_count`"
+                    },
+                    {
+                      "name": "total_count",
+                      "expression": "`total_count`"
+                    },
+                    {
+                      "name": "details",
+                      "expression": "`details`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`status` IN ('FAIL', 'WARN')"
+                    }
+                  ],
+                  "disaggregated": true,
+                  "orders": [
+                    {
+                      "direction": "ASC",
+                      "expression": "`status`"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Open Issues — Failures & Warnings",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "status",
+                    "useForSearch": false
+                  },
+                  {
+                    "fieldName": "layer"
+                  },
+                  {
+                    "fieldName": "check_name"
+                  },
+                  {
+                    "fieldName": "check_type"
+                  },
+                  {
+                    "fieldName": "fail_count"
+                  },
+                  {
+                    "fieldName": "total_count"
+                  },
+                  {
+                    "fieldName": "details"
+                  }
+                ],
+                "rowOrder": [
+                  {
+                    "by": "column",
+                    "field": {
+                      "index": 0
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 15,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "40e0ea9e",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d1525da3",
+                  "fields": [
+                    {
+                      "name": "sum(pass_count)",
+                      "expression": "SUM(`pass_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "FAIL Checks",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(pass_count)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "85676b55",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a3a96883",
+                  "fields": [
+                    {
+                      "name": "layer",
+                      "expression": "`layer`"
+                    },
+                    {
+                      "name": "max(executed_at)",
+                      "expression": "MAX(`executed_at`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Latest Run Timestamp by Layer",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "layer",
+                    "headerAlignment": "left"
+                  },
+                  {
+                    "fieldName": "max(executed_at)",
+                    "headerAlignment": "left"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 21,
+            "width": 4,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
