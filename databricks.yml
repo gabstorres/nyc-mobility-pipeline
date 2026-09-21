@@ -1,0 +1,269 @@
+resources:
+  jobs:
+    NYC_Mobility_Pipeline:
+      name: NYC Mobility Pipeline
+      tasks:
+        - task_key: 00_create_control_tables
+          sql_task:
+            file:
+              path: etl/01_control/00_create_control_tables.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 10_load_green_taxi
+          depends_on:
+            - task_key: 00_create_control_tables
+          sql_task:
+            file:
+              path: etl/02_bronze/10_load_green_taxi.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 20_load_open_meteo
+          depends_on:
+            - task_key: 00_create_control_tables
+          sql_task:
+            file:
+              path: etl/02_bronze/20_load_open_meteo.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 30_load_taxi_zones
+          depends_on:
+            - task_key: 00_create_control_tables
+          sql_task:
+            file:
+              path: etl/02_bronze/30_load_taxi_zones.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 90_validate_control
+          depends_on:
+            - task_key: 10_load_green_taxi
+            - task_key: 20_load_open_meteo
+            - task_key: 30_load_taxi_zones
+          sql_task:
+            file:
+              path: etl/01_control/90_validate_control.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 90_validate_green_taxi
+          depends_on:
+            - task_key: 10_load_green_taxi
+          sql_task:
+            file:
+              path: etl/02_bronze/90_validate_green_taxi.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 90_validate_open_meteo
+          depends_on:
+            - task_key: 20_load_open_meteo
+          sql_task:
+            file:
+              path: etl/02_bronze/90_validate_open_meteo_weather.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 90_validate_taxi_zones
+          depends_on:
+            - task_key: 30_load_taxi_zones
+          sql_task:
+            file:
+              path: etl/02_bronze/90_validate_taxi_zones.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 10_clean_green_taxi
+          depends_on:
+            - task_key: 90_validate_green_taxi
+          sql_task:
+            file:
+              path: etl/03_silver/10_clean_green_taxi.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 90_validate_clean_green_taxi
+          depends_on:
+            - task_key: 10_clean_green_taxi
+          sql_task:
+            file:
+              path: etl/03_silver/90_validate_green_taxi.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 20_clean_weather_hourly
+          depends_on:
+            - task_key: 90_validate_open_meteo
+          sql_task:
+            file:
+              path: etl/03_silver/20_clean_weather_hourly.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 90_validate_clean_weather_hourly
+          depends_on:
+            - task_key: 20_clean_weather_hourly
+          sql_task:
+            file:
+              path: etl/03_silver/90_validate_weather_hourly.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 30_clean_taxi_zones
+          depends_on:
+            - task_key: 90_validate_taxi_zones
+          sql_task:
+            file:
+              path: etl/03_silver/30_clean_taxi_zones.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 90_validate_clean_taxi_zones
+          depends_on:
+            - task_key: 30_clean_taxi_zones
+          sql_task:
+            file:
+              path: etl/03_silver/90_validate_taxi_zones.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 10_resolve_trip_zones
+          depends_on:
+            - task_key: 90_validate_clean_green_taxi
+            - task_key: 90_validate_clean_taxi_zones
+            - task_key: 90_validate_clean_weather_hourly
+            - task_key: 90_validate_control
+          sql_task:
+            file:
+              path: etl/04_integration/10_resolve_trip_zones.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 20_resolve_trip_weather
+          depends_on:
+            - task_key: 10_resolve_trip_zones
+          sql_task:
+            file:
+              path: etl/04_integration/20_resolve_trip_weather.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 90_validate_integration
+          depends_on:
+            - task_key: 20_resolve_trip_weather
+          sql_task:
+            file:
+              path: etl/04_integration/90_validate_integration.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 10_dim_date
+          depends_on:
+            - task_key: 90_validate_integration
+          sql_task:
+            file:
+              path: etl/05_gold/10_dim_date.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 11_dim_hour
+          depends_on:
+            - task_key: 90_validate_integration
+          sql_task:
+            file:
+              path: etl/05_gold/11_dim_hour.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 12_dim_taxi_zone
+          depends_on:
+            - task_key: 90_validate_integration
+          sql_task:
+            file:
+              path: etl/05_gold/12_dim_taxi_zone.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 13_dim_weather_classification
+          depends_on:
+            - task_key: 90_validate_integration
+          sql_task:
+            file:
+              path: etl/05_gold/13_dim_weather_classification.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 20_fact_weather_hourly
+          depends_on:
+            - task_key: 10_dim_date
+            - task_key: 11_dim_hour
+            - task_key: 12_dim_taxi_zone
+            - task_key: 13_dim_weather_classification
+          sql_task:
+            file:
+              path: etl/05_gold/20_fact_weather_hourly.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 30_fact_taxi_trip
+          depends_on:
+            - task_key: 20_fact_weather_hourly
+          sql_task:
+            file:
+              path: etl/05_gold/30_fact_taxi_trip.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 90_validate_gold
+          depends_on:
+            - task_key: 20_fact_weather_hourly
+            - task_key: 30_fact_taxi_trip
+          sql_task:
+            file:
+              path: etl/05_gold/90_validate_gold.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 10_activity_by_time_and_zone
+          depends_on:
+            - task_key: 90_validate_gold
+          sql_task:
+            file:
+              path: etl/06_analytics/10_activity_by_time_and_zone.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 20_trip_behavior_by_weather
+          depends_on:
+            - task_key: 90_validate_gold
+          sql_task:
+            file:
+              path: etl/06_analytics/20_trip_behavior_by_weather.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 30_mobility_patterns_by_zone
+          depends_on:
+            - task_key: 90_validate_gold
+          sql_task:
+            file:
+              path: etl/06_analytics/30_mobility_patterns_by_zone.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: 90_validate_analytics
+          depends_on:
+            - task_key: 10_activity_by_time_and_zone
+            - task_key: 20_trip_behavior_by_weather
+            - task_key: 30_mobility_patterns_by_zone
+          sql_task:
+            file:
+              path: etl/06_analytics/90_validate_analytics.sql
+              source: GIT
+            warehouse_id: 7d6db0d013d454fc
+        - task_key: dq_dashboard
+          depends_on:
+            - task_key: 90_validate_gold
+            - task_key: 90_validate_analytics
+            - task_key: 90_validate_clean_green_taxi
+            - task_key: 90_validate_open_meteo
+            - task_key: 90_validate_green_taxi
+            - task_key: 90_validate_clean_weather_hourly
+            - task_key: 90_validate_integration
+            - task_key: 90_validate_taxi_zones
+            - task_key: 90_validate_control
+            - task_key: 90_validate_clean_taxi_zones
+          run_if: ALL_DONE
+          dashboard_task:
+            subscription: {}
+            warehouse_id: 7d6db0d013d454fc
+            dashboard_id: 01f1b2d854811eb6ae9d063a806e7612
+        - task_key: nyc_mobility_analytics
+          depends_on:
+            - task_key: 90_validate_analytics
+          dashboard_task:
+            subscription: {}
+            warehouse_id: 7d6db0d013d454fc
+            dashboard_id: 01f1b2d7cd3819ab9f69f54022737848
+      git_source:
+        git_url: https://github.com/hyenalouise/nyc-mobility-pipeline
+        git_provider: gitHub
+        git_branch: main
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED

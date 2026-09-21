@@ -1,0 +1,980 @@
+{
+  "datasets": [
+    {
+      "name": "622bd780",
+      "displayName": "activity_by_time_and_zone",
+      "config": {
+        "version": "1.1",
+        "source": "`ftw-week-08`.`06-analytics`.activity_by_time_and_zone",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "5d008b93",
+      "displayName": "mobility_patterns_by_zone",
+      "config": {
+        "version": "1.1",
+        "source": "`ftw-week-08`.`06-analytics`.mobility_patterns_by_zone",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "d33cb315",
+      "displayName": "trip_behavior_by_weather",
+      "config": {
+        "version": "1.1",
+        "source": "`ftw-week-08`.`06-analytics`.trip_behavior_by_weather",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "74ebfab2",
+      "displayName": "NYC Mobility Analytics Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "8521238d",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block\"><span style=\"font-weight: 500;font-family: Trebuchet MS;font-size: 54px;line-height: 1.5;color: #8BCAE7;\">NYC MOBILITY ANALYTICS DASHBOARD</span></span>"
+              ]
+            },
+            "specExtensions": {
+              "widgetBorderColor": {
+                "dark": "#4C80AB"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total-trips",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "622bd780",
+                  "fields": [
+                    {
+                      "name": "sum(trip_count)",
+                      "expression": "SUM(`trip_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family: Inconsolata;\">Total Trips</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(trip_count)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "f73d94ac",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "622bd780",
+                  "fields": [
+                    {
+                      "name": "avg(avg_fare_amount_usd)",
+                      "expression": "AVG(`avg_fare_amount_usd`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family: Inconsolata;\">Average Fare (USD)</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(avg_fare_amount_usd)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "4658577e",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "622bd780",
+                  "fields": [
+                    {
+                      "name": "avg(avg_trip_distance_miles)",
+                      "expression": "AVG(`avg_trip_distance_miles`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family: Inconsolata;\">Average Distance (Miles)</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(avg_trip_distance_miles)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "e9be20e0",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "622bd780",
+                  "fields": [
+                    {
+                      "name": "avg(avg_trip_duration_minutes)",
+                      "expression": "AVG(`avg_trip_duration_minutes`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family: Inconsolata;\">Average Duration (Minutes)</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(avg_trip_duration_minutes)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 2,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "b301ac28",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block\"><span style=\"font-weight: 500;\">*Q1. When and where is recorded Green Taxi activity highest?*</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "trip-count-by-pickup-date",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "622bd780",
+                  "fields": [
+                    {
+                      "name": "pickup_borough",
+                      "expression": "`pickup_borough`"
+                    },
+                    {
+                      "name": "trip_count",
+                      "expression": "`trip_count`"
+                    },
+                    {
+                      "name": "pickup_zone_name",
+                      "expression": "`pickup_zone_name`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family: Inconsolata;\">Top Pickup Zones by Trip Count</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "layout": "stack"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "trip_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "pickup_zone_name",
+                  "scale": {
+                    "type": "categorical",
+                    "categorySize": {
+                      "type": "number-of-categories",
+                      "number": 15
+                    },
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "pickup_borough",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "trip-count-by-hour-day-week",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "622bd780",
+                  "fields": [
+                    {
+                      "name": "sum(trip_count)",
+                      "expression": "SUM(`trip_count`)"
+                    },
+                    {
+                      "name": "pickup_day_of_week",
+                      "expression": "`pickup_day_of_week`"
+                    },
+                    {
+                      "name": "pickup_time_of_day_band",
+                      "expression": "`pickup_time_of_day_band`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family: Inconsolata;\">Trip Activity by Day of Week and Time of Day</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "heatmap",
+              "encodings": {
+                "x": {
+                  "fieldName": "pickup_day_of_week",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "pickup_time_of_day_band",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "color": {
+                  "fieldName": "sum(trip_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 6,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "e6233dd5",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"color: #11171C;\">*Recorded Green Taxi activity is concentrated in a small number of pickup zones, with East Harlem North and East Harlem South generating the highest trip volumes. Activity levels are generally strongest during afternoon and evening periods across most weekdays, indicating consistent demand patterns throughout the week.*</span>"
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#8BCAE7"
+              },
+              "widgetBorderColor": {
+                "dark": "#04294F"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "178f2395",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-weight: 500;\">*Q2. How is weather associated with taxi activity and trip behavior?*</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "trip-behavior-by-weather-condition",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d33cb315",
+                  "fields": [
+                    {
+                      "name": "precipitation_band",
+                      "expression": "`precipitation_band`"
+                    },
+                    {
+                      "name": "weather_condition",
+                      "expression": "`weather_condition`"
+                    },
+                    {
+                      "name": "trips_per_covered_hour",
+                      "expression": "`trips_per_covered_hour`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family: Inconsolata;\">Trip Activity by Weather Condition</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "weather_condition",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "trips_per_covered_hour",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "precipitation_band",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 15,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "average-trip-duration-by-weather-condition-minutes",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d33cb315",
+                  "fields": [
+                    {
+                      "name": "weather_condition",
+                      "expression": "`weather_condition`"
+                    },
+                    {
+                      "name": "avg_trip_duration_minutes",
+                      "expression": "`avg_trip_duration_minutes`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family: Inconsolata;\">Average Trip Duration by Weather Condition (Minutes)</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "weather_condition",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg_trip_duration_minutes",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 15,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "f91f4891",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"color: #11171C;\">*Weather conditions appear to be associated with differences in both taxi activity and trip behavior. Trip activity varies across weather conditions, while average trip duration generally increases during adverse weather conditions such as rain and snow. These results describe association rather than causation and are based on a single citywide weather observation point.*</span>"
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#8BCAE7"
+              },
+              "widgetBorderColor": {
+                "dark": "#04294F"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 21,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "c7a7e6b0",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-weight: 500;\">*Q3. Which areas show the strongest mobility patterns?*</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 23,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "top-zones-by-pickup-activity",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5d008b93",
+                  "fields": [
+                    {
+                      "name": "borough",
+                      "expression": "`borough`"
+                    },
+                    {
+                      "name": "zone_name",
+                      "expression": "`zone_name`"
+                    },
+                    {
+                      "name": "pickup_count",
+                      "expression": "`pickup_count`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family: Inconsolata;\">Top Zones by Pickup Activity</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "zone_name",
+                  "scale": {
+                    "type": "categorical",
+                    "categorySize": {
+                      "type": "number-of-categories",
+                      "number": 10
+                    },
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "pickup_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "borough",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 24,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "30e5a7bc",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5d008b93",
+                  "fields": [
+                    {
+                      "name": "borough",
+                      "expression": "`borough`"
+                    },
+                    {
+                      "name": "zone_name",
+                      "expression": "`zone_name`"
+                    },
+                    {
+                      "name": "dropoff_count",
+                      "expression": "`dropoff_count`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family: Inconsolata;\">Top Zones by Dropoff Activity</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "zone_name",
+                  "scale": {
+                    "type": "categorical",
+                    "categorySize": {
+                      "type": "number-of-categories",
+                      "number": 10
+                    },
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "dropoff_count",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "borough",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 24,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "net-arrivals-by-zone",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5d008b93",
+                  "fields": [
+                    {
+                      "name": "zone_name",
+                      "expression": "`zone_name`"
+                    },
+                    {
+                      "name": "net_arrivals",
+                      "expression": "`net_arrivals`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family:Inconsolata\">Net Arrivals by Zone (Positive)</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "zone_name",
+                  "scale": {
+                    "type": "categorical",
+                    "categorySize": {
+                      "type": "number-of-categories",
+                      "number": 10
+                    },
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "net_arrivals",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 30,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "4e0e95f6",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5d008b93",
+                  "fields": [
+                    {
+                      "name": "zone_name",
+                      "expression": "`zone_name`"
+                    },
+                    {
+                      "name": "net_arrivals",
+                      "expression": "`net_arrivals`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"font-family:Inconsolata\">Net Arrivals by Zone (Negative)</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "zone_name",
+                  "scale": {
+                    "type": "categorical",
+                    "categorySize": {
+                      "type": "number-of-categories",
+                      "number": 10
+                    },
+                    "sort": {
+                      "by": "y"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "net_arrivals",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 30,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "996b2761",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"color: #11171C;\">*The strongest mobility activity is concentrated in a small number of zones with high pickup and dropoff volumes. Net arrival patterns indicate that some areas function primarily as destinations while others generate more outgoing trips, revealing different roles within the city's mobility network.*</span>"
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#8BCAE7"
+              },
+              "widgetBorderColor": {
+                "dark": "#04294F"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 36,
+            "width": 12,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#FAFAFB",
+        "dark": "#1F272D"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#11171C"
+      },
+      "widgetBorderColor": {
+        "dark": "#6EAFE3"
+      },
+      "fontColor": {
+        "light": "#11171C",
+        "dark": "#E8ECF0"
+      },
+      "selectionColor": {
+        "light": "#2272B4",
+        "dark": "#8ACAFF"
+      },
+      "widgetHeaderAlignment": "LEFT",
+      "widgetPadding": 12,
+      "widgetCornerRadius": 16
+    },
+    "applyModeEnabled": false
+  }
+}

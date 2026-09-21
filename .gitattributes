@@ -1,0 +1,10 @@
+# Databricks source-format notebooks keep Markdown hard line breaks, which are
+# two trailing spaces at the end of a "# MAGIC" or "-- MAGIC" line. Git's
+# whitespace check cannot tell those from an accidental stray space, so it is
+# switched off for these paths. Everything else is still checked, including
+# plain SQL and Python outside notebooks.
+etl/**/*.sql -whitespace
+etl/**/*.py -whitespace
+notebooks/**/*.py -whitespace
+notebooks/**/*.sql -whitespace
+tests/**/*.py -whitespace

@@ -1,0 +1,29 @@
+{
+  "registry_status": "official_links_checked_payloads_not_validated",
+  "taxi": {
+    "source_system": "green_taxi",
+    "index_url": "https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page",
+    "bootstrap_files": [
+      {
+        "source_month": "2026-03",
+        "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2026-03.parquet"
+      },
+      {
+        "source_month": "2026-04",
+        "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2026-04.parquet"
+      },
+      {
+        "source_month": "2026-05",
+        "url": "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2026-05.parquet"
+      }
+    ],
+    "discovery_note": "Bootstrap inventory for homework. Ingestion discovers all eligible unprocessed versions in the configured landing location; this list is not the ingestion-state store."
+  },
+  "zones": {
+    "url": "https://d37ci6vzurychx.cloudfront.net/misc/taxi_zone_lookup.csv"
+  },
+  "weather": {
+    "endpoint": "https://archive-api.open-meteo.com/v1/archive",
+    "documentation": "https://open-meteo.com/en/docs/historical-weather-api"
+  }
+}
