@@ -1,0 +1,32 @@
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+config/project.local.json
+.databrickscfg
+.databricks/
+*.pem
+*.key
+
+# Source data, local processing state, and generated bulk outputs
+/data/
+/landing/
+/local_state/
+/tmp/
+/work/
+/logs/
+*.parquet
+*.db
+*.duckdb
+*.sqlite
+
+# Local runtime/editor files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store
+.idea/
+.vscode/
