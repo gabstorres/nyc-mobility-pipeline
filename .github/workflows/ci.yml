@@ -33,6 +33,11 @@ jobs:
       - name: Run tests and policy checks
         run: python -m pytest tests -q
 
+      - name: Run DuckDB sanity checks
+        run: |
+          python -m pip install duckdb pandas
+          python tests/duckdb_check_fare_per_mile.py
+
   pr-description:
     name: PR links an issue
     if: github.event_name == 'pull_request'
